@@ -13,7 +13,7 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY || "PASTE-YOUR-GROQ-KEY-HERE";
 // Get your FREE API key at: https://console.groq.com
 // ==============================
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 async function callGroq(messages) {
   const body = JSON.stringify({
