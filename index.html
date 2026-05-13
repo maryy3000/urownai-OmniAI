@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OmniAI — Your Ultimate AI Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #07070f;
+  --surface: #0f0f1a;
+  --surface2: #151525;
+  --border: #1e1e35;
+  --border2: #2a2a45;
+  --text: #e0e0f0;
+  --text2: #8888aa;
+  --text3: #4a4a6a;
+  --accent: #6c63ff;
+  --accent2: #00d4aa;
+  --user-bubble: #4f46e5;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+}
+.logo-name {
+  font-size: 19px; font-weight: 700;
+  background: linear-gradient(90deg, #a78bfa, #34d399);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header-right {
+  display: flex; align-items: center; gap: 10px;
+}
+.model-badge {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: #a78bfa;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'Fira Code', monospace;
+}
+
+/* LAYOUT */
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 230px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.new-btn {
+  background: linear-gradient(135deg, #6c63ff20, #00d4aa20);
+  border: 1px solid #6c63ff40;
+  color: #c4b5fd;
+  padding: 10px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+.new-btn:hover { background: linear-gradient(135deg, #6c63ff35, #00d4aa35); }
+.section-label {
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 6px 2px;
+}
+.history-item {
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.2s;
+}
+.history-item:hover, .history-item.active {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+/* CHAT */
+.chat-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scroll-behavior: smooth;
+}
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* WELCOME */
+.welcome {
+  text-align: center;
+  padding: 50px 20px 30px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.welcome-icon {
+  font-size: 44px;
+  margin-bottom: 16px;
+  display: block;
+}
+.welcome h1 {
+  font-size: 28px; font-weight: 700;
+  background: linear-gradient(135deg, #a78bfa, #34d399, #60a5fa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+.welcome p { color: var(--text2); font-size: 15px; margin-bottom: 28px; line-height: 1.6; }
+.suggestions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.sug {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text2);
+  font-size: 13px;
+  line-height: 1.5;
+  font-family: inherit;
+}
+.sug:hover { border-color: #6c63ff55; color: var(--text); background: #1a1a30; }
+.sug-label {
+  display: block;
+  font-size: 10px;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* MESSAGES */
+.msg { display: flex; gap: 12px; align-items: flex-start; animation: pop 0.3s ease; }
+.msg.user { flex-direction: row-reverse; }
+@keyframes pop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600;
+  flex-shrink: 0;
+}
+.avatar.ai { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 13px; }
+.avatar.user { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; font-size: 13px; }
+
+.bubble {
+  max-width: 70%;
+  padding: 13px 17px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.msg.ai .bubble {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  border-radius: 4px 16px 16px 16px;
+}
+.msg.user .bubble {
+  background: linear-gradient(135deg, var(--user-bubble), #6c63ff);
+  color: #fff;
+  border-radius: 16px 4px 16px 16px;
+}
+
+/* TYPING */
+.typing-dots { display: flex; gap: 5px; padding: 5px 0; align-items: center; }
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: bounce 1.2s infinite;
+}
+.dot:nth-child(2) { animation-delay: 0.2s; background: #8b7cf8; }
+.dot:nth-child(3) { animation-delay: 0.4s; background: var(--accent2); }
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-8px); } }
+
+/* CODE */
+.bubble pre {
+  background: #0a0a18;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: #a0e0c0;
+  margin: 8px 0;
+}
+.bubble code {
+  font-family: 'Fira Code', monospace;
+  background: #1a1a30;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #a0e0c0;
+}
+
+/* INPUT */
+.input-area {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.input-box {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 10px 14px;
+  transition: border-color 0.2s;
+}
+.input-box:focus-within { border-color: #6c63ff80; }
+textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  max-height: 130px;
+  line-height: 1.55;
+}
+textarea::placeholder { color: var(--text3); }
+.send {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  border-radius: 9px;
+  width: 38px; height: 38px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.send:hover { opacity: 0.88; transform: scale(1.05); }
+.send:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+.send svg { fill: white; width: 17px; height: 17px; }
+.history-item { display: flex; align-items: center; justify-content: space-between; }
+.chat-title { flex: 1; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.delete-btn { background: none; border: none; cursor: pointer; color: #4a4a6a; font-size: 13px; padding: 2px 4px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; flex-shrink: 0; }
+.history-item:hover .delete-btn { opacity: 1; }
+.hint { text-align: center; font-size: 11px; color: var(--text3); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div style="text-align:center; padding: 5px; background: linear-gradient(90deg, #6c63ff22, #00d4aa22); border-bottom: 1px solid #6c63ff33; font-size: 12px; color: #8888aa; letter-spacing: 0.5px;">
+  Welcome to OmniAI &nbsp;·&nbsp; Your ultimate free AI assistant
+</div>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">✦</div>
+    <span class="logo-name">OmniAI</span>
+  </div>
+  <div class="header-right">
+    <span style="font-size:11px; color: #8888aa; margin-right: 10px;">Made by <span style="background: linear-gradient(90deg, #6c63ff, #00d4aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 13px;">Aaban</span> ✦</span>
+    <span class="model-badge">claude-sonnet</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <button class="new-btn" onclick="newChat()">
+      <span>＋</span> New Chat
+    </button>
+    <div class="section-label">Recent Chats</div>
+    <div id="history-list"></div>
+  </div>
+
+  <div class="chat-wrap">
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <span class="welcome-icon">✦</span>
+        <h1>OmniAI — Ask Anything</h1>
+        <p>Your ultimate AI assistant. Smarter than ChatGPT, faster than DeepSeek, powered by Claude. Code, write, analyze — all in one place.</p>
+        <div class="suggestions">
+          <button class="sug" onclick="suggest('Write a Python web scraper for news articles')">
+            <span class="sug-label">💻 Code</span>Write a Python web scraper
+          </button>
+          <button class="sug" onclick="suggest('Explain machine learning like I am 10 years old')">
+            <span class="sug-label">🧠 Learn</span>Explain ML like I'm 10
+          </button>
+          <button class="sug" onclick="suggest('Write a professional email to my boss asking for a raise')">
+            <span class="sug-label">✍️ Write</span>Email asking for a raise
+          </button>
+          <button class="sug" onclick="suggest('Give me a full workout plan for building muscle at home')">
+            <span class="sug-label">💪 Health</span>Home muscle workout plan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-box">
+        <textarea id="inp" rows="1" placeholder="Ask OmniAI anything… (Shift+Enter for new line)"
+          onkeydown="handleKey(event)" oninput="resize(this)"></textarea>
+        <button class="send" id="sendBtn" onclick="send()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <div class="hint">OmniAI can make mistakes — double-check important info.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Chat storage ──
+let chats = JSON.parse(localStorage.getItem('omni_chats') || '[]');
+let currentId = null;
+let busy = false;
+
+function saveChats() {
+  localStorage.setItem('omni_chats', JSON.stringify(chats));
+}
+
+function getChat(id) {
+  return chats.find(c => c.id === id);
+}
+
+function resize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 130) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+// ── Sidebar rendering ──
+function renderSidebar() {
+  const container = document.getElementById('history-list');
+  container.innerHTML = '';
+  [...chats].reverse().forEach(chat => {
+    const div = document.createElement('div');
+    div.className = 'history-item' + (chat.id === currentId ? ' active' : '');
+    div.innerHTML = `
+      <span class="chat-title" onclick="loadChat('${chat.id}')">${chat.title}</span>
+      <button class="delete-btn" onclick="deleteChat('${chat.id}')" title="Delete">🗑</button>`;
+    container.appendChild(div);
+  });
+}
+
+function deleteChat(id) {
+  chats = chats.filter(c => c.id !== id);
+  saveChats();
+  if (currentId === id) {
+    currentId = null;
+    showWelcome();
+  }
+  renderSidebar();
+}
+
+function loadChat(id) {
+  currentId = id;
+  const chat = getChat(id);
+  const el = document.getElementById('messages');
+  el.innerHTML = '';
+  chat.messages.forEach(m => {
+    if (m.role !== 'system') renderMsg(m.role === 'user' ? 'user' : 'ai', m.content);
+  });
+  renderSidebar();
+  el.scrollTop = el.scrollHeight;
+}
+
+function newChat() {
+  currentId = null;
+  showWelcome();
+  renderSidebar();
+}
+
+function showWelcome() {
+  document.getElementById('messages').innerHTML = `
+    <div class="welcome" id="welcome">
+      <span class="welcome-icon">✦</span>
+      <h1>OmniAI — Ask Anything</h1>
+      <p>Your ultimate AI assistant. Smarter than ChatGPT, faster than DeepSeek. Code, write, analyze — all in one place.</p>
+      <div class="suggestions">
+        <button class="sug" onclick="suggest('Write a Python web scraper for news articles')"><span class="sug-label">💻 Code</span>Write a Python web scraper</button>
+        <button class="sug" onclick="suggest('Explain machine learning like I am 10 years old')"><span class="sug-label">🧠 Learn</span>Explain ML like I'm 10</button>
+        <button class="sug" onclick="suggest('Write a professional email to my boss asking for a raise')"><span class="sug-label">✍️ Write</span>Email asking for a raise</button>
+        <button class="sug" onclick="suggest('Give me a full workout plan for building muscle at home')"><span class="sug-label">💪 Health</span>Home muscle workout plan</button>
+      </div>
+    </div>`;
+}
+
+function suggest(text) {
+  document.getElementById('inp').value = text;
+  resize(document.getElementById('inp'));
+  send();
+}
+
+function esc(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmt(text) {
+  let t = esc(text);
+  t = t.replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre>$1</pre>');
+  t = t.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  t = t.replace(/\n/g, '<br>');
+  return t;
+}
+
+function renderMsg(role, text) {
+  const w = document.getElementById('welcome');
+  if (w) w.remove();
+  const el = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `
+    <div class="avatar ${role}">${role === 'ai' ? '✦' : '👤'}</div>
+    <div class="bubble">${fmt(text)}</div>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function showTyping() {
+  const w = document.getElementById('welcome');
+  if (w) w.remove();
+  const el = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typing';
+  div.innerHTML = `<div class="avatar ai">✦</div><div class="bubble"><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+async function send() {
+  if (busy) return;
+  const inp = document.getElementById('inp');
+  const text = inp.value.trim();
+  if (!text) return;
+
+  inp.value = ''; inp.style.height = 'auto';
+  busy = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  // Create new chat if none active
+  if (!currentId) {
+    const id = 'chat_' + Date.now();
+    const newC = { id, title: text.slice(0, 35) + (text.length > 35 ? '…' : ''), messages: [] };
+    chats.push(newC);
+    currentId = id;
+  }
+
+  const chat = getChat(currentId);
+  chat.messages.push({ role: 'user', content: text });
+  saveChats();
+  renderSidebar();
+  renderMsg('user', text);
+  showTyping();
+
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chat.messages })
+    });
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) {
+      renderMsg('ai', '⚠️ Error: ' + data.error);
+    } else {
+      chat.messages.push({ role: 'assistant', content: data.reply });
+      saveChats();
+      renderMsg('ai', data.reply);
+    }
+  } catch (err) {
+    removeTyping();
+    renderMsg('ai', '⚠️ Could not connect to server. Make sure server.js is running!');
+  }
+
+  busy = false;
+  document.getElementById('sendBtn').disabled = false;
+  inp.focus();
+}
+
+// Init
+renderSidebar();
+</script>
+</body>
+</html>
