@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OmniAI — Your Ultimate AI Assistant</title>
+<title>2050AI — Your Ultimate AI Assistant</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -315,17 +315,17 @@ textarea::placeholder { color: var(--text3); }
 <body>
 
 <div style="text-align:center; padding: 5px; background: linear-gradient(90deg, #6c63ff22, #00d4aa22); border-bottom: 1px solid #6c63ff33; font-size: 12px; color: #8888aa; letter-spacing: 0.5px;">
-  Welcome to OmniAI &nbsp;·&nbsp; Your ultimate free AI assistant
+  Welcome to 2050AI &nbsp;·&nbsp; Your ultimate free AI assistant
 </div>
 
 <div class="header">
   <div class="logo">
     <div class="logo-icon">✦</div>
-    <span class="logo-name">OmniAI</span>
+    <span class="logo-name">2050AI</span>
   </div>
   <div class="header-right">
     <span style="font-size:11px; color: #8888aa; margin-right: 10px;">Made by <span style="background: linear-gradient(90deg, #6c63ff, #00d4aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 13px;">Aaban</span> ✦</span>
-    <span class="model-badge">claude-sonnet</span>
+    <span class="model-badge">Groq · Llama 3.3</span>
   </div>
 </div>
 
@@ -342,7 +342,7 @@ textarea::placeholder { color: var(--text3); }
     <div class="messages" id="messages">
       <div class="welcome" id="welcome">
         <span class="welcome-icon">✦</span>
-        <h1>OmniAI — Ask Anything</h1>
+        <h1>2050AI — Ask Anything</h1>
         <p>Your ultimate AI assistant. Smarter than ChatGPT, faster than DeepSeek, powered by Claude. Code, write, analyze — all in one place.</p>
         <div class="suggestions">
           <button class="sug" onclick="suggest('Write a Python web scraper for news articles')">
@@ -363,13 +363,13 @@ textarea::placeholder { color: var(--text3); }
 
     <div class="input-area">
       <div class="input-box">
-        <textarea id="inp" rows="1" placeholder="Ask OmniAI anything… (Shift+Enter for new line)"
+        <textarea id="inp" rows="1" placeholder="Ask 2050AI anything… (Shift+Enter for new line)"
           onkeydown="handleKey(event)" oninput="resize(this)"></textarea>
         <button class="send" id="sendBtn" onclick="send()">
           <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
         </button>
       </div>
-      <div class="hint">OmniAI can make mistakes — double-check important info.</div>
+      <div class="hint">2050AI can make mistakes — double-check important info.</div>
     </div>
   </div>
 </div>
@@ -443,7 +443,7 @@ function showWelcome() {
   document.getElementById('messages').innerHTML = `
     <div class="welcome" id="welcome">
       <span class="welcome-icon">✦</span>
-      <h1>OmniAI — Ask Anything</h1>
+      <h1>2050AI — Ask Anything</h1>
       <p>Your ultimate AI assistant. Smarter than ChatGPT, faster than DeepSeek. Code, write, analyze — all in one place.</p>
       <div class="suggestions">
         <button class="sug" onclick="suggest('Write a Python web scraper for news articles')"><span class="sug-label">💻 Code</span>Write a Python web scraper</button>
